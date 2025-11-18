@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getUserContracts, addContract, deleteContract } from '../lib/api';
-import { calculateBundleDiscount, formatDiscountInfo } from '../lib/bundleDiscount';
+import { getUserContracts, addContract, deleteContract } from '@/lib/api';
+import { calculateBundleDiscount, formatDiscountInfo } from '@/lib/bundleDiscount';
 
 interface Module {
   module_id: number;
