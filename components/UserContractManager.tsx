@@ -6,7 +6,7 @@ import { getUserContracts, addContract, deleteContract } from '../lib/api';
 import { calculateBundleDiscount, formatDiscountInfo } from '../lib/bundleDiscount';
 // --- (ラファエル修正 1 ここまで) ---
 
--interface Module {
+interface Module {
   module_id: number;
   module_name: string;
   tier_id: number;
