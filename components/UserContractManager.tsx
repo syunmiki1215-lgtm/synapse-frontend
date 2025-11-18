@@ -77,7 +77,9 @@ export default function UserContractManager({
         // 契約を追加 (deleteContract ではなく addContract を呼ぶ)
         const newContractData = { userId: userId, moduleId: moduleId };
         await addContract(apiBaseUrl, newContractData); 
-        setSelectedModuleIds(new Set([...selectedModuleIds, moduleId]));
+        const newSelected = new Set(selectedModuleIds);
+	newSelected.add(moduleId);
+	setSelectedModuleIds(newSelected);
         // --- (ラファエル修正 5 ここまで) ---
       } else {
         // --- (ラファエル修正 6: 「削除」バグを修正) ---
