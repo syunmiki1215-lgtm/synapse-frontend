@@ -62,13 +62,13 @@ export default function UserContractManager({
     try {
       if (isChecked) {
         // 契約を追加
-        await addContract(userId, moduleId);
+        await addContract(apiBaseUrl, { userId, moduleId });
         setSelectedModuleIds(new Set([...selectedModuleIds, moduleId]));
       } else {
         // 契約を削除
         const contractToDelete = contracts.find((c) => c.module_id === moduleId);
         if (contractToDelete) {
-          await deleteContract(contractToDelete.contract_id);
+          await deleteContract(apiBaseUrl, contractId);
           const newSelected = new Set(selectedModuleIds);
           newSelected.delete(moduleId);
           setSelectedModuleIds(newSelected);
@@ -76,7 +76,7 @@ export default function UserContractManager({
       }
 
       // 契約一覧を再取得
-      const updatedContracts = await getUserContracts(userId);
+      const updatedContracts = await getUserContracts(apiBaseUrl);
       setContracts(updatedContracts || []);
       onContractUpdate();
     } catch (err) {
