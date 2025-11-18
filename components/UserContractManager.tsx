@@ -178,7 +178,7 @@ export default function UserContractManager({
                 <span>Discount ({(discountResult.discountRate * 100).toFixed(0)}%):</span>
                 <span>-¥{discountResult.discountAmount.toFixed(2)}</span>
               </div>
-      _message     )}
+          )}
 
             <div className="flex justify-between font-bold text-lg border-t pt-2">
               <span>Total Monthly Cost:</span>
