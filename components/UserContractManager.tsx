@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+// --- (ラファエル修正 1: import パスを修正) ---
 import { getUserContracts, addContract, deleteContract } from '../lib/api';
 import { calculateBundleDiscount, formatDiscountInfo } from '../lib/bundleDiscount';
+// --- (ラファエル修正 1 ここまで) ---
 
-// --- (ラファエル修正 1: interface を正しく定義) ---
 interface Module {
   module_id: number;
   module_name: string;
@@ -22,20 +23,21 @@ interface ContractWithModule {
   start_date: string;
 }
 
+// --- (ラファエル修正 2: interface を正しく定義) ---
 interface UserContractManagerProps {
   apiBaseUrl: string; // <-- 修正
   modules: Module[];
   onContractUpdate: () => void;
 }
-// --- (ラファエル修正 1 ここまで) ---
+// --- (ラファエル修正 2 ここまで) ---
 
 export default function UserContractManager({
-  // --- (ラファエル修正 2: apiBaseUrl を受け取る) ---
+  // --- (ラファエル修正 3: apiBaseUrl を受け取る) ---
   apiBaseUrl, // <-- 修正
   modules,
   onContractUpdate,
 }: UserContractManagerProps) {
-  // --- (ラファエル修正 2 ここまで) ---
+  // --- (ラファエル修正 3 ここまで) ---
 
   // (TODO: 本物のユーザーIDを後でここに渡す)
   const userId = 1; // <-- 【重要】ここでダミーの 1 を設定します
@@ -50,9 +52,9 @@ export default function UserContractManager({
     const fetchContracts = async () => {
       try {
         setLoading(true);
-        // --- (ラファエル修正 3: apiBaseUrl を渡す) ---
+        // --- (ラファエル修正 4: apiBaseUrl を渡す) ---
         const data = await getUserContracts(apiBaseUrl);
-        // --- (ラファエル修正 3 ここまで) ---
+        // --- (ラファエル修正 4 ここまで) ---
         setContracts(data || []);
         setSelectedModuleIds(new Set(data?.map((c: ContractWithModule) => c.module_id) || []));
         setError(null);
@@ -65,34 +67,37 @@ export default function UserContractManager({
     };
 
     fetchContracts();
-    // --- (ラファエル修正 4: 依存配列を修正) ---
-  }, [apiBaseUrl]); // <-- userId ではなく apiBaseUrl に依存
-    // --- (ラファエル修正 4 ここまで) ---
+    // --- (ラファエル修正 5: 依存配列を修正) ---
+  }, [apiBaseUrl, modules, onContractUpdate]); // <-- 修正
+    // --- (ラファエル修正 5 ここまで) ---
 
   // チェックボックスの変更を処理
   const handleModuleToggle = async (moduleId: number, isChecked: boolean) => {
     try {
       if (isChecked) {
-        // --- (ラファエル修正 5: 「追加」バグを修正) ---
-        // 契約を追加 (deleteContract ではなく addContract を呼ぶ)
+        // --- (ラファエル修正 6: 「追加」バグを修正) ---
+        // 契約を追加
         const newContractData = { userId: userId, moduleId: moduleId };
         await addContract(apiBaseUrl, newContractData); 
-        const newSelected = new Set(selectedModuleIds);
-	newSelected.add(moduleId);
-	setSelectedModuleIds(newSelected);
-        // --- (ラファエル修正 5 ここまで) ---
+        
+        // --- (ラファエル修正 7: 「Set」のバグを修正) ---
+        const newSelected = new Set(selectedModuleIds);
+        newSelected.add(moduleId);
+        setSelectedModuleIds(newSelected);
+        // --- (ラファエル修正 7 ここまで) ---
+        
+        // --- (ラファエル修正 6 ここまで) ---
       } else {
-        // --- (ラファエル修正 6: 「削除」バグを修正) ---
+        // --- (ラファエル修正 8: 「削除」バグを修正) ---
         // 契約を削除
         const contractToDelete = contracts.find((c) => c.module_id === moduleId);
         if (contractToDelete) {
-          // (contractId ではなく contractToDelete.contract_id を渡す)
           await deleteContract(apiBaseUrl, contractToDelete.contract_id); 
           const newSelected = new Set(selectedModuleIds);
           newSelected.delete(moduleId);
           setSelectedModuleIds(newSelected);
         }
-        // --- (ラファエル修正 6 ここまで) ---
+        // --- (ラファエル修正 8 ここまで) ---
       }
 
       // 契約一覧を再取得
@@ -178,7 +183,7 @@ export default function UserContractManager({
                 <span>Discount ({(discountResult.discountRate * 100).toFixed(0)}%):</span>
                 <span>-¥{discountResult.discountAmount.toFixed(2)}</span>
               </div>
-          )}
+            )}
 
             <div className="flex justify-between font-bold text-lg border-t pt-2">
               <span>Total Monthly Cost:</span>
@@ -191,7 +196,7 @@ export default function UserContractManager({
             <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm">
               <strong>Bundle Discount Applied!</strong> The lowest-priced module (
               {modules.find((m) => m.module_id === discountResult.discountedModuleId)?.module_name})
-              receives {(discountResult.discountRate * 100).toFixed(0)}% off.
+            	receives {(discountResult.discountRate * 100).toFixed(0)}% off.
             </div>
           )}
         </div>
