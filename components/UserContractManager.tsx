@@ -129,7 +129,7 @@ export default function UserContractManager({
       {/* モジュール選択チェックボックス */}
       <div className="mb-6">
         <h3 className="font-semibold mb-3">Available Modules</h3>
-V         <div className="space-y-2">
+         <div className="space-y-2">
           {modules.map((module) => (
             <label key={module.module_id} className="flex items-center p-2 hover:bg-gray-50 rounded">
               <input
@@ -139,7 +139,7 @@ V         <div className="space-y-2">
                 className="w-4 h-4 mr-3"
               />
               <div className="flex-1">
-V                 <div className="font-semibold">{module.module_name}</div>
+                 <div className="font-semibold">{module.module_name}</div>
                 <div className="text-sm text-gray-600">
                   Tier {module.tier_id} - ¥{module.base_price.toFixed(2)}/month
                 </div>
@@ -167,7 +167,7 @@ V                 <div className="font-semibold">{module.module_name}</d
                     </span>
                   )}
                 </div>
-    _message         ))}
+             ))}
             </div>
           </div>
 
@@ -180,7 +180,7 @@ V                 <div className="font-semibold">{module.module_name}</d
 
             {discountResult.discountAmount > 0 && (
               <div className="flex justify-between text-red-600">
-content               <span>Discount ({(discountResult.discountRate * 100).toFixed(0)}%):</span>
+               <span>Discount ({(discountResult.discountRate * 100).toFixed(0)}%):</span>
                 <span>-¥{discountResult.discountAmount.toFixed(2)}</span>
             	</div>
           	)}
@@ -194,7 +194,7 @@ content               <span>Discount ({(discountResult.discountRate * 100
         	{/* 割引情報 */}
         	{discountResult.discountRate > 0 && (
           	<div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm">
-V             	<strong>Bundle Discount Applied!</strong> The lowest-priced module (
+             	<strong>Bundle Discount Applied!</strong> The lowest-priced module (
             	{modules.find((m) => m.module_id === discountResult.discountedModuleId)?.module_name})
             	receives {(discountResult.discountRate * 100).toFixed(0)}% off.
           	</div>
